@@ -11,22 +11,10 @@ const destination = './copy.txt';
     const originFile = await fs.open(origin, 'r');
     const destFile = await fs.open(destination, 'w');
 
-    let bytesRead = -1;
+    const readStream = originFile.createReadStream();
+    const writeStream = destFile.createWriteStream();
 
-    while (bytesRead !== 0) {
-      const readResult = await originFile.read();
-      bytesRead = readResult.bytesRead;
-
-      if (bytesRead !== 16384) {
-        const indesOfNotFilled = readResult.buffer.indexOf(0);
-        const newBuffer = Buffer.alloc(indesOfNotFilled);
-        readResult.buffer.copy(newBuffer, 0, 0, indesOfNotFilled);
-
-        await destFile.write(newBuffer);
-      } else {
-        await destFile.write(readResult.buffer);
-      }
-    }
+    readStream.pipe(writeStream);
   } catch (error) {
     console.log(error);
     console.timeEnd(timeLabel);
