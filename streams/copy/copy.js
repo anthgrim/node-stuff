@@ -15,6 +15,10 @@ const destination = './copy.txt';
     const writeStream = destFile.createWriteStream();
 
     readStream.pipe(writeStream);
+
+    readStream.on('end', () => {
+      console.timeEnd(timeLabel);
+    });
   } catch (error) {
     console.log(error);
     console.timeEnd(timeLabel);
