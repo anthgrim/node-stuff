@@ -1,3 +1,4 @@
+// User the NET module for TCP servers
 const net = require('node:net');
 
 const server = net.createServer((socket) => {
